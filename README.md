@@ -1,7 +1,3 @@
-Forced Evolution
-
-================
-
 ****************
 UPDATES 06-21-20 by Brad Egan\
 Version 2.1
@@ -20,7 +16,9 @@ EXAMPLE CMD: python fe.py TARGET='localhost:5000' ADDR='/login' VULN_VAR='passwo
 
 
 
+Forced Evolution
 
+================
 
 
 INSTALL:
