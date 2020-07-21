@@ -399,9 +399,9 @@ def save_DB(exploit_found):
         for line in db:
             if exploit_found in line:
                 print ('EXPLOIT ALREADY IN DB')
-            else:
-                db.write(exploit_found + '\n')
-                print ('EXPLOIT SAVED TO DB')
+                return 0    
+        db.write(exploit_found + '\n')
+        print ('EXPLOIT SAVED TO DB')
                 
 
 
