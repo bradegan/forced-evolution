@@ -398,10 +398,10 @@ def save_DB(exploit_found):
     with open("database", "a+") as db:
         for line in db:
             if exploit_found in line:
-                return 'EXPLOIT ALREADY IN DB'
+                print ('EXPLOIT ALREADY IN DB')
             else:
                 db.write(exploit_found + '\n')
-                return 'EXPLOIT SAVED TO DB'
+                print ('EXPLOIT SAVED TO DB')
                 
 
 
