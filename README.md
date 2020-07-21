@@ -4,10 +4,14 @@ Forced Evolution
 
 ****************
 UPDATES 06-21-20 by Brad Egan\
+Version 2.1\
+
 Now ported and tested to work on Python 3 🔨!\
 Bugs 🐛 have been squashed. \
 DB global removed\
 Write and Read DB Fixed
+
+All credits to Soen for original code.
 
 EXAMPLE CMD: python fe.py TARGET='localhost:5000' ADDR='/login' VULN_VAR='password' METHOD=post OTHER_VARIABLES='username=admin' GOAL_TEXT='Login success!'
 *****************
@@ -15,7 +19,7 @@ EXAMPLE CMD: python fe.py TARGET='localhost:5000' ADDR='/login' VULN_VAR='passwo
 [![](http://img.youtube.com/vi/rYVctpqNS9k/0.jpg)](http://www.youtube.com/watch?v=rYVctpqNS9k "DEF CON 21 - Soen - Evolving Exploits Through Genetic Algorithms")
 
 
-Version 3.0
+
 
 
 
