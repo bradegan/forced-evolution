@@ -4,7 +4,7 @@ Forced Evolution
 
 ****************
 UPDATES 06-21-20 by Brad Egan\
-Version 2.1\
+Version 2.1
 
 Now ported and tested to work on Python 3 🔨!\
 Bugs 🐛 have been squashed. \
