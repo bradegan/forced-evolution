@@ -395,14 +395,17 @@ def load_DB():
 
 
 def save_DB(exploit_found):
-    with open("database", "a+") as db:
-        for line in db:
+    print('EXPLOIT FOUND IS',exploit_found)
+    with open("database", "r") as db:
+        lines = db.readlines()
+        for line in lines:
             if exploit_found in line:
-                print ('EXPLOIT ALREADY IN DB')
-                return 0    
+                print('EXPLOIT ALREADY EXISTS IN DB')
+                return 'EXPLOIT ALREADY EXISTS IN DB'
+    with open("database", "a") as db:
         db.write(exploit_found + '\n')
-        print ('EXPLOIT SAVED TO DB')
-                
+        print( 'EXPLOIT SAVED TO DB')
+                      
 
 
 
