@@ -12,7 +12,8 @@ Write and Read DB Fixed
 
 All credits to Soen for original code.
 
-EXAMPLE CMD: python fe.py TARGET='localhost:5000' ADDR='/login' VULN_VAR='password' METHOD=post OTHER_VARIABLES='username=admin' GOAL_TEXT='Login success!'
+EXAMPLE CMD: 
+```python fe.py TARGET='localhost:5000' ADDR='/login' VULN_VAR='password' METHOD=post OTHER_VARIABLES='username=admin' GOAL_TEXT='Login success!'```
 *****************
 
 
