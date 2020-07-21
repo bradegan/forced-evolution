@@ -1,4 +1,4 @@
-<iframe width="560" height="315" src="https://www.youtube.com/embed/rYVctpqNS9k" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+[![](http://img.youtube.com/vi/rYVctpqNS9k/0.jpg)](http://www.youtube.com/watch?v=rYVctpqNS9k "DEF CON 21 - Soen - Evolving Exploits Through Genetic Algorithms")
 
 Forced Evolution
 
